@@ -30,18 +30,16 @@ set -e
 ## Init openvpn
 echo "Initialize..."
 if [[ ! -f /etc/openvpn/.config.lock ]]; then
-  echo ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-0.0.0.0}
-  ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-0.0.0.0}
+  ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
   touch /etc/openvpn/.config.lock
 fi
 
-echo ">>> Waiting Passphrase"
-while [[ ! -f /etc/openvpn/pki/ta.key ]]; do echo -n "."; sleep 2; done; echo "."
+echo "Waiting passphrase..."
+while [[ ! -f /etc/openvpn/pki/ta.key ]]; do sleep 2; done
 
-echo "IP"
-while [[ ! -f "/etc/openvpn/pki/issued/${EXTERNAL_ADDRESS}.crt" ]]; do echo -n "."; sleep 2; done; echo "."
-
+echo "Waiting DNS..."
+while [[ ! -f "/etc/openvpn/pki/issued/${EXTERNAL_ADDRESS}.crt" ]]; do sleep 2; done
 
 ## Start foreground server
-echo "Server Ready"
+echo "Server is ready!"
 ovpn_run
