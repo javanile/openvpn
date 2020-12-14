@@ -32,8 +32,6 @@ if [[ -z "${1}" ]]; then
 	exit 1
 fi
 
-easyrsa build-client-full "${1}" >> "/etc/openvpn/${1}.log"
-
 if [[ -n "${2}" ]]; then
 	case ${2} in
 		"ubuntu")
