@@ -7,6 +7,7 @@ push: build
 
 build:
 	chmod +x *.sh
+	docker build -t javanile/openvpn .
 	docker-compose build openvpn
 
 test: build
