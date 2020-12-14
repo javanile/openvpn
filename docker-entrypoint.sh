@@ -35,6 +35,9 @@ if [[ ! -f /etc/openvpn/.config.lock ]]; then
   touch /etc/openvpn/.config.lock
 fi
 
+echo ">>> Waiting Passphrase"
+while [[ ! -f /etc/openvpn/pki/ta.key ]]; do echo -n "."; sleep 2; done; echo "."
+
 ## Start foreground server
 echo "Server Ready"
 ovpn_run
