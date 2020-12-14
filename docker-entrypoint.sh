@@ -28,6 +28,8 @@ set -e
 ##
 
 ## Init openvpn
+echo "CMD $@"
+
 echo "Initialize..."
 if [[ ! -f /etc/openvpn/.config.lock ]]; then
   ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}

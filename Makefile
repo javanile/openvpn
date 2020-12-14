@@ -23,5 +23,11 @@ test-add_client: build
 test-get_client: build
 	docker-compose run --rm openvpn get_client test > test.ovpn
 
+test-get_client_ubuntu: build
+	docker-compose run --rm openvpn get_client test ubuntu > test.ovpn
+
 test-remove_client: build
 	docker-compose run --rm openvpn remove_client test > test.ovpn
+
+test-connect:
+	sudo openvpn --config test.ovpn

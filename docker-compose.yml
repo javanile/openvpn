@@ -6,8 +6,7 @@ services:
     tty: true
     stdin_open: true
     environment:
-      - DNS_IP=0.0.0.0
-      - EXTERNAL_ADDRESS=0.0.0.0
+      - EXTERNAL_ADDRESS=87.20.169.83
     ports:
       - 1194:1194/udp
     cap_add:
