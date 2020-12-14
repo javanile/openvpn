@@ -2,16 +2,16 @@
 
 Best free VPN server for Docker
 
-### Configure VPN Passphrase
-
-```
-$ docker-compose run --rm openvpn set_passphrase 
-```
-
 ### Start environment
 
 ```
 $ docker-compose up -d
+```
+
+### Configure VPN Passphrase
+
+```
+$ docker-compose run --rm openvpn set_passphrase 
 ```
 
 ## Clients

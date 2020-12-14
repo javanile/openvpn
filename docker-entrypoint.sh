@@ -28,10 +28,13 @@ set -e
 ##
 
 ## Init openvpn
+echo "Initialize..."
 if [[ ! -f /etc/openvpn/.config.lock ]]; then
+  echo openvpn ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-0.0.0.0}
   openvpn ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-0.0.0.0}
   touch /etc/openvpn/.config.lock
 fi
 
 ## Start foreground server
+echo "Server Ready"
 ovpn_run
