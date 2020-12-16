@@ -1,7 +1,7 @@
 FROM kylemanna/openvpn
 LABEL mantainer="Francesco Bianco <bianco@javanile.org>"
 
-#RUN apk update && apk --no-cache add ufw ip6tables
+RUN apk update && apk --no-cache add socat
 
 COPY ./set_passphrase.sh /usr/bin/set_passphrase
 
