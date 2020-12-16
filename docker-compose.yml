@@ -7,6 +7,7 @@ services:
     stdin_open: true
     environment:
       - EXTERNAL_ADDRESS=87.20.169.83
+      - CLIENT_FORWARD=192.168.255.2:1000,192.168.255.3:2000
     ports:
       - 1194:1194/udp
     cap_add:
