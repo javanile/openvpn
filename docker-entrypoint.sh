@@ -36,6 +36,8 @@ echo "-- OpenVPN --"
 ## Init openvpn
 echo "Initialize..."
 if [[ ! -f /etc/openvpn/.config.lock ]]; then
+  ## generate config is core problem in docker scenarious
+  ## see more: <https://heavymetaldev.com/openvpn-with-docker>
   ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
   touch /etc/openvpn/.config.lock
 fi
