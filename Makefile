@@ -11,7 +11,8 @@ build:
 	docker-compose build openvpn
 
 test: build
-	#docker-compose down -v
+	docker-compose down -v
+	sudo rm -fr ./openvpn/
 	docker-compose up --force-recreate openvpn
 
 test-set_passphrase: build

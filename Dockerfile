@@ -1,8 +1,6 @@
 FROM kylemanna/openvpn
 LABEL mantainer="Francesco Bianco <bianco@javanile.org>"
 
-ENV OVPN_DEFROUTE=0
-
 RUN apk update && apk --no-cache add socat
 
 COPY ./set_passphrase.sh /usr/bin/set_passphrase

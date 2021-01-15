@@ -6,6 +6,7 @@ services:
     tty: true
     stdin_open: true
     environment:
+      - OVPN_DEFROUTE=0
       - EXTERNAL_ADDRESS=87.20.169.83
       - CLIENT_FORWARD=192.168.255.2:1000,192.168.255.3:2000
     ports:
@@ -13,8 +14,5 @@ services:
     cap_add:
       - NET_ADMIN
     volumes:
-      - openvpn:/etc/openvpn
+      - ./openvpn:/etc/openvpn
     restart: always
-
-volumes:
-  openvpn:
