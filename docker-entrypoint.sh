@@ -35,7 +35,12 @@ echo "-- OpenVPN --"
 
 ## Init openvpn
 echo "Initialize..."
-[[ -f '/etc/openvpn/ovpn_env.sh' ]] || echo 'declare -x OVPN_DEFROUTE=0' > /etc/openvpn/ovpn_env.sh
+if [[ -f '/etc/openvpn/ovpn_env.sh' ]]; then
+  echo "Use default configuration"
+else
+  echo "Loading extended configuration from environment variables"
+  [[ -n "${OVPN_DEFROUTE}" ]] && echo "declare -x OVPN_DEFROUTE=${OVPN_DEFROUTE}" > /etc/openvpn/ovpn_env.sh
+fi
 if [[ ! -f /etc/openvpn/.config.lock ]]; then
   ## generate config is core problem in docker scenarious
   ## see more: <https://heavymetaldev.com/openvpn-with-docker>
