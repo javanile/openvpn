@@ -39,7 +39,8 @@ if [[ -f '/etc/openvpn/ovpn_env.sh' ]]; then
   echo "Use default configuration"
 else
   echo "Loading extended configuration from environment variables"
-  [[ -n "${OVPN_DEFROUTE}" ]] && echo "declare -x OVPN_DEFROUTE=${OVPN_DEFROUTE}" > /etc/openvpn/ovpn_env.sh
+  [[ -n "${OVPN_DEFROUTE}" ]] && echo "declare -x OVPN_DEFROUTE=${OVPN_DEFROUTE}" >> /etc/openvpn/ovpn_env.sh
+  [[ -n "${OVPN_DISABLE_PUSH_BLOCK_DNS}" ]] && echo "declare -x OVPN_DISABLE_PUSH_BLOCK_DNS=${OVPN_DISABLE_PUSH_BLOCK_DNS}" >> /etc/openvpn/ovpn_env.sh
 fi
 if [[ ! -f /etc/openvpn/.config.lock ]]; then
   ## generate config is core problem in docker scenarious

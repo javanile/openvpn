@@ -17,6 +17,7 @@ test: build
 	docker-compose run --rm openvpn set_passphrase
 	docker-compose run --rm openvpn add_client test
 	docker-compose run --rm openvpn get_client test > test.ovpn
+	docker-compose logs -f openvpn
 
 test-set_passphrase: build
 	docker-compose run --rm openvpn set_passphrase
