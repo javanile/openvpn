@@ -35,3 +35,7 @@ test-remove_client: build
 
 test-connect:
 	sudo openvpn --config test.ovpn
+
+test-bash: build
+	docker-compose up -d --force-recreate openvpn
+	docker-compose exec openvpn bash

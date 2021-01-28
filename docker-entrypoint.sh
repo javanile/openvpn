@@ -27,11 +27,11 @@ set -e
 # SOFTWARE.
 ##
 
-echo "-- Docker info --"
-echo "CMD: $@"
-echo ""
-
 echo "-- OpenVPN --"
+if [[ "$1" = "bash" ]]; then
+  bash
+  exit
+fi
 
 ## Init openvpn
 echo "Initialize..."
