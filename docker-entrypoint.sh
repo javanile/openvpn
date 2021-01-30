@@ -27,8 +27,9 @@ set -e
 # SOFTWARE.
 ##
 
-OVPN_ENV="${OPENVPN}/ovpn_env.sh"
-OVPN_AUTOCONF="${OPENVPN}/.autoconf"
+X_OVPN_ENV="${OPENVPN}/ovpn_env.sh"
+X_OVPN_AUTOCONF="${OPENVPN}/.autoconf"
+X_OVPN_VERSION=$(openvpn --version | head -n1 | cut -d' ' -f2)
 
 ## Scripting server-side strategy
 if [[ "$1" = "bash" ]]; then
@@ -38,23 +39,24 @@ fi
 
 ## Init openvpn
 echo "Initialize..."
-echo "Looking for '${OVPN_ENV}'"
-if [[ -f "${OVPN_ENV}" ]]; then
+echo "Server version: ${X_OVPN_VERSION}"
+echo "Looking for '${X_OVPN_ENV}'"
+if [[ -f "${X_OVPN_ENV}" ]]; then
   echo "Use default configuration"
 else
   echo "Loading extended configuration from environment variables"
   (set | grep '^OVPN_') | while read -r var; do
-    echo "declare -x $var"  >> "${OVPN_ENV}"
+    echo "declare -x $var"  >> "${X_OVPN_ENV}"
   done
 fi
 
 ## Processing autoconfig
-if [[ -f "${OVPN_AUTOCONF}" ]]; then
+if [[ -f "${X_OVPN_AUTOCONF}" ]]; then
   echo "Autoconfig already done"
 else
   echo "Processing autoconfig..."
   ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
-  touch "${OVPN_AUTOCONF}"
+  touch "${X_OVPN_AUTOCONF}"
 fi
 
 ## Waiting passphrase
