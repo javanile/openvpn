@@ -27,34 +27,45 @@ set -e
 # SOFTWARE.
 ##
 
-echo "-- OpenVPN --"
+OVPN_ENV="${OPENVPN}/ovpn_env.sh"
+OVPN_AUTOCONF="${OPENVPN}/.autoconf"
+
+## Scripting server-side strategy
 if [[ "$1" = "bash" ]]; then
-  bash
-  exit
+  exec "$@"
+  exit "$?"
 fi
 
 ## Init openvpn
 echo "Initialize..."
-if [[ -f '/etc/openvpn/ovpn_env.sh' ]]; then
+echo "Looking for '${OVPN_ENV}'"
+if [[ -f "${OVPN_ENV}" ]]; then
   echo "Use default configuration"
 else
   echo "Loading extended configuration from environment variables"
-  [[ -n "${OVPN_DEFROUTE}" ]] && echo "declare -x OVPN_DEFROUTE=${OVPN_DEFROUTE}" >> /etc/openvpn/ovpn_env.sh
-  [[ -n "${OVPN_DISABLE_PUSH_BLOCK_DNS}" ]] && echo "declare -x OVPN_DISABLE_PUSH_BLOCK_DNS=${OVPN_DISABLE_PUSH_BLOCK_DNS}" >> /etc/openvpn/ovpn_env.sh
-fi
-if [[ ! -f /etc/openvpn/.config.lock ]]; then
-  ## generate config is core problem in docker scenarious
-  ## see more: <https://heavymetaldev.com/openvpn-with-docker>
-  ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
-  touch /etc/openvpn/.config.lock
+  (set | grep '^OVPN_') | while read -r var; do
+    echo "declare -x $var"  >> "${OVPN_ENV}"
+  done
 fi
 
+## Processing autoconfig
+if [[ -f "${OVPN_AUTOCONF}" ]]; then
+  echo "Autoconfig already done"
+else
+  echo "Processing autoconfig..."
+  ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
+  touch "${OVPN_AUTOCONF}"
+fi
+
+## Waiting passphrase
 echo "Waiting passphrase..."
 while [[ ! -f /etc/openvpn/pki/ta.key ]]; do sleep 2; done
 
+## Waiting DNS
 echo "Waiting DNS..."
 while [[ ! -f "/etc/openvpn/pki/issued/${EXTERNAL_ADDRESS}.crt" ]]; do sleep 2; done
 
+## Client forwarding
 echo "Client forwarding..."
 if [[ -n "${CLIENT_FORWARD}" ]]; then
   IFS=',' read -r -a rules <<< "${CLIENT_FORWARD}"
