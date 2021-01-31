@@ -59,7 +59,8 @@ if [[ -f "${X_OVPN_AUTOCONF}" ]]; then
   echo "Autoconfig already done"
 else
   echo "Processing autoconfig..."
-  ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
+  #ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
+  ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0}
   touch "${X_OVPN_AUTOCONF}"
 fi
 

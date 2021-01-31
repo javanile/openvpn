@@ -1,7 +1,7 @@
 
 clean:
 	@docker-compose down -v
-	@docker-compose run --rm openvpn bash -c 'find $$OPENVPN -type f -delete'
+	@docker-compose run --rm openvpn bash -c 'find $$OPENVPN -mindepth 1 -delete'
 
 push: build
 	git add .

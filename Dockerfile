@@ -2,7 +2,8 @@ FROM kylemanna/openvpn
 LABEL mantainer="Francesco Bianco <bianco@javanile.org>"
 
 ## Default environment variables
-ENV OVPN_DEFROUTE=0 \
+ENV OVPN_DNS=0 \
+    OVPN_DEFROUTE=0 \
     OVPN_DISABLE_PUSH_BLOCK_DNS=1
 
 RUN apk update && apk --no-cache add socat
