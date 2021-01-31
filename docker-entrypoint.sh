@@ -45,8 +45,12 @@ if [[ -f "${X_OVPN_ENV}" ]]; then
   echo "Use default configuration"
 else
   echo "Loading extended configuration from environment variables"
+  if [[ "${OVPN_DEFROUTE}" = "0" ]] && [[ "${#OVPN_PUSH[@]}" = "0" ]]; then
+    OVPN_PUSH+=("route 0.0.0.0 128.0.0.0 net_gateway")
+    OVPN_PUSH+=("route 128.0.0.0 128.0.0.0 net_gateway")
+  fi
   (set | grep '^OVPN_') | while read -r var; do
-    echo "declare -x $var"  >> "${X_OVPN_ENV}"
+    echo "declare -x $var" >> "${X_OVPN_ENV}"
   done
 fi
 

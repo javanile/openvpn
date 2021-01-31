@@ -14,9 +14,7 @@ build:
 	docker build -t javanile/openvpn .
 	docker-compose build openvpn
 
-test: build
-	docker-compose down -v
-	docker-compose run --rm openvpn bash -c 'rm -fr $OPENVPN'
+test: clean build
 	docker-compose up -d --force-recreate openvpn
 	docker-compose run --rm openvpn set_passphrase
 	docker-compose run --rm openvpn add_client test
