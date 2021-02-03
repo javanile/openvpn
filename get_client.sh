@@ -48,6 +48,8 @@ fi
 
 ovpn_getclient ${1}
 
+echo "keepalive 10 60"
+
 if [[ ${#EXTRA_OPTS} -gt 0 ]]; then
 	echo -e ${EXTRA_OPTS}
 fi
