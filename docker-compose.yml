@@ -17,3 +17,8 @@ services:
     volumes:
       - ./openvpn:/etc/openvpn
     restart: always
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
