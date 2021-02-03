@@ -1,4 +1,8 @@
 
+clean:
+	@docker-compose down -v
+	@docker-compose run --rm openvpn bash -c 'find $$OPENVPN -mindepth 1 -delete'
+
 push: build
 	git add .
 	git commit -am "publish" || true
@@ -10,14 +14,18 @@ build:
 	docker build -t javanile/openvpn .
 	docker-compose build openvpn
 
-test: build
-	docker-compose down -v
-	sudo rm -fr ./openvpn/
+bash:
+	@docker-compose exec openvpn bash
+
+test: clean build
 	docker-compose up -d --force-recreate openvpn
 	docker-compose run --rm openvpn set_passphrase
 	docker-compose run --rm openvpn add_client test
 	docker-compose run --rm openvpn get_client test > test.ovpn
 	docker-compose logs -f openvpn
+
+test-entrypoint: clean build
+	docker-compose up --force-recreate openvpn
 
 test-set_passphrase: build
 	docker-compose run --rm openvpn set_passphrase

@@ -46,3 +46,10 @@ And should have a config file generated using the following command
 ```
 $ docker-compose exec openvpn get_client CLIENTNAME --ubuntu > CLIENTNAME.ovpn
 ```
+
+## Hotfix
+
+```
+push "route 0.0.0.0 128.0.0.0 net_gateway"
+push "route 128.0.0.0 128.0.0.0 net_gateway"
+```
