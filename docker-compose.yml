@@ -6,7 +6,7 @@ services:
     tty: true
     stdin_open: true
     environment:
-      - EXTERNAL_ADDRESS=87.13.169.118
+      - EXTERNAL_ADDRESS=87.16.175.17
       - CLIENT_FORWARD=192.168.255.2:1000,192.168.255.3:2000
     ports:
       - 1194:1194/udp
