@@ -28,6 +28,7 @@ set -e
 ##
 
 X_OVPN_ENV="${OPENVPN}/ovpn_env.sh"
+X_OVPN_CONF=${OPENVPN}/openvpn.conf
 X_OVPN_AUTOCONF="${OPENVPN}/.autoconf"
 X_OVPN_VERSION=$(openvpn --version | head -n1 | cut -d' ' -f2)
 
@@ -61,6 +62,7 @@ else
   echo "Processing autoconfig..."
   #ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
   ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0}
+  echo "explicit-exit-notify 1" >> ${X_OVPN_CONF}
   touch "${X_OVPN_AUTOCONF}"
 fi
 
