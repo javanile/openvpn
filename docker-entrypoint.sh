@@ -61,7 +61,7 @@ if [[ -f "${X_OVPN_AUTOCONF}" ]]; then
 else
   echo "Processing autoconfig..."
   #ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
-  ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0}
+  ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0}:${EXTERNAL_PORT:-1194}
   echo "explicit-exit-notify 1" >> ${X_OVPN_CONF}
   touch "${X_OVPN_AUTOCONF}"
 fi
