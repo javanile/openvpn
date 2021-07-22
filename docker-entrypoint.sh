@@ -57,7 +57,6 @@ if [[ -f "${X_OVPN_ENV}" ]]; then
     rm -fr "${X_OVPN_ENV}" "${X_OVPN_AUTOCONF}"
   fi
 fi
-
 if [[ -f "${X_OVPN_ENV}" ]]; then
   echo "Use default configuration"
 else
