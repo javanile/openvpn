@@ -32,6 +32,9 @@ X_OVPN_CONF=${OPENVPN}/openvpn.conf
 X_OVPN_AUTOCONF="${OPENVPN}/.autoconf"
 X_OVPN_VERSION=$(openvpn --version | head -n1 | cut -d' ' -f2)
 
+external_address=${EXTERNAL_ADDRESS:-0.0.0.0}
+external_port=${EXTERNAL_PORT:-1194}
+
 ## Scripting server-side strategy
 if [[ "$1" = "bash" ]]; then
   exec "$@"
@@ -41,7 +44,20 @@ fi
 ## Init openvpn
 echo "Initialize..."
 echo "Server version: ${X_OVPN_VERSION}"
+echo "External address: ${external_address}"
+echo "External port: ${external_port}"
 echo "Looking for '${X_OVPN_ENV}'"
+if [[ -f "${X_OVPN_ENV}" ]]; then
+  echo "Testing configuration integrity"
+  if grep -qE "declare -x OVPN_CN=${external_address}$" "${X_OVPN_ENV}"; then
+    echo "Recreating configuration due to different external address"
+    rm -fr "${X_OVPN_ENV}" "${X_OVPN_AUTOCONF}"
+  elif grep -qE "declare -x OVPN_PORT=${external_port}$" "${X_OVPN_ENV}"; then
+    echo "Recreating configuration due to different external port"
+    rm -fr "${X_OVPN_ENV}" "${X_OVPN_AUTOCONF}"
+  fi
+fi
+
 if [[ -f "${X_OVPN_ENV}" ]]; then
   echo "Use default configuration"
 else
@@ -60,8 +76,8 @@ if [[ -f "${X_OVPN_AUTOCONF}" ]]; then
   echo "Autoconfig already done"
 else
   echo "Processing autoconfig..."
-  #ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0} -n ${DNS_IP:-8.8.8.8}
-  ovpn_genconfig -u udp://${EXTERNAL_ADDRESS:-0.0.0.0}:${EXTERNAL_PORT:-1194}
+  #ovpn_genconfig -u udp://${external_address} -n ${DNS_IP:-8.8.8.8}
+  ovpn_genconfig -u udp://${external_address}:${external_port}
   echo "explicit-exit-notify 1" >> ${X_OVPN_CONF}
   touch "${X_OVPN_AUTOCONF}"
 fi
@@ -72,7 +88,7 @@ while [[ ! -f /etc/openvpn/pki/ta.key ]]; do sleep 2; done
 
 ## Waiting DNS
 echo "Waiting DNS..."
-while [[ ! -f "/etc/openvpn/pki/issued/${EXTERNAL_ADDRESS}.crt" ]]; do sleep 2; done
+while [[ ! -f "/etc/openvpn/pki/issued/${external_address}.crt" ]]; do sleep 2; done
 
 ## Client forwarding
 echo "Client forwarding..."
