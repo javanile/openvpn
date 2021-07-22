@@ -5,7 +5,7 @@ clean:
 
 push: build
 	@git add .
-	@git commit -am "publish" || true
+	@git commit -am "Release $(shell date +"%U/%y")" || true
 	@git push
 	@docker push javanile/openvpn:$(shell head -1 Dockerfile | cut -d: -f2)
 
