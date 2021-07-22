@@ -49,10 +49,10 @@ echo "External port: ${external_port}"
 echo "Looking for '${X_OVPN_ENV}'"
 if [[ -f "${X_OVPN_ENV}" ]]; then
   echo "Testing configuration integrity"
-  if grep -qE "declare -x OVPN_CN=${external_address}$" "${X_OVPN_ENV}"; then
+  if ! grep -qE "declare -x OVPN_CN=${external_address}$" "${X_OVPN_ENV}"; then
     echo "Recreating configuration due to different external address"
     rm -fr "${X_OVPN_ENV}" "${X_OVPN_AUTOCONF}"
-  elif grep -qE "declare -x OVPN_PORT=${external_port}$" "${X_OVPN_ENV}"; then
+  elif ! grep -qE "declare -x OVPN_PORT=${external_port}$" "${X_OVPN_ENV}"; then
     echo "Recreating configuration due to different external port"
     rm -fr "${X_OVPN_ENV}" "${X_OVPN_AUTOCONF}"
   fi
