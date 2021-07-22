@@ -4,15 +4,15 @@ clean:
 	@docker-compose run --rm openvpn bash -c 'find $$OPENVPN -mindepth 1 -delete'
 
 push: build
-	git add .
-	git commit -am "publish" || true
-	git push
-	docker push javanile/openvpn
+	@git add .
+	@git commit -am "publish" || true
+	@git push
+	@docker push javanile/openvpn:$(shell head -1 Dockerfile | cut -d: -f2)
 
 build:
-	chmod +x *.sh
-	docker build -t javanile/openvpn .
-	docker-compose build openvpn
+	@chmod +x *.sh
+	@docker build -t javanile/openvpn:$(shell head -1 Dockerfile | cut -d: -f2) .
+	@docker-compose build openvpn
 
 bash:
 	@docker-compose exec openvpn bash

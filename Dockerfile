@@ -1,4 +1,4 @@
-FROM kylemanna/openvpn
+FROM kylemanna/openvpn:2.4
 LABEL mantainer="Francesco Bianco <bianco@javanile.org>"
 
 ## Default environment variables
