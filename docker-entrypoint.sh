@@ -98,7 +98,7 @@ if [[ -n "${CLIENT_FORWARD}" ]]; then
   for rule in "${rules[@]}"; do
     host="$(echo ${rule} | cut -s -d':' -f1)"
     port="$(echo ${rule} | cut -s -d':' -f2)"
-    plan="socat -v tcp-listen:${port:-21},reuseaddr,fork tcp:${host:-0.0.0.0}:${port:-21}"
+    plan="socat tcp-listen:${port:-21},reuseaddr,fork tcp:${host:-0.0.0.0}:${port:-21}"
     echo "FORWARD: ${plan}"
     ${plan} &
   done
